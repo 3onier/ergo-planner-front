@@ -18,6 +18,8 @@ export class DoctorDetail implements OnInit{
     @Input() public doctor?: Doctor;
     @Output() public doctorUpdated: EventEmitter<Doctor> = new EventEmitter<Doctor>;
 
+    isWritable = signal(true);
+
     private doctorService = inject(DoctorService);
     private activatedRoute = inject(ActivatedRoute)
     private toastService = inject(ToastService);
@@ -46,6 +48,7 @@ export class DoctorDetail implements OnInit{
           next: (dr) => {
             this.doctor = dr;
             this.isDoctorLoading.set(false);
+            this.isWritable.set(false);
           }
         }
       );
@@ -61,8 +64,13 @@ export class DoctorDetail implements OnInit{
           this.toastService.displayToast({
             text: "Arzt wurde gespeichert",
             color: "success"
-          })
+          });
+          this.isWritable.set(false);
         }
       })
+    }
+
+    toggleWritable(){
+      this.isWritable.set(!this.isWritable());
     }
 }

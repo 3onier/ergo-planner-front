@@ -1,0 +1,147 @@
+@if (isLoadingPatient()) {
+  <div class="d-flex justify-content-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+} @else {
+  <form class="p-1" (ngSubmit)="save()">
+    <div class="container-fluid d-flex align-items-end justify-content-between p-0">
+      <label class="mt-2">Angaben zur Person</label>
+      <span class="btn btn-outline-primary mb-1" (click)="toggleWritable()">Bearbeiten</span>
+    </div>
+    <div class="input-group mb-1">
+      <span class="input-group-text" id="basic-addon1">Title</span>
+      <input
+        [(ngModel)]="patient.title"
+        name="title"
+        type="text"
+        required
+        [disabled]="!isWritable()"
+        class="form-control"
+        placeholder="Titel"
+        aria-label="Titel"
+        aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group mb-1">
+      <span class="input-group-text" id="basic-addon1">Vorname</span>
+      <input
+        [(ngModel)]="patient.first_name"
+        name="first_name"
+        type="text"
+        required
+        [disabled]="!isWritable()"
+        class="form-control"
+        placeholder="Vorname"
+        aria-label="Vorname"
+        aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group mb-1">
+      <span class="input-group-text" id="basic-addon1">Nachname</span>
+      <input
+        [(ngModel)]="patient.last_name"
+        name="last_name"
+        type="text"
+        required
+        [disabled]="!isWritable()"
+        class="form-control"
+        placeholder="Nachname"
+        aria-label="nachname"
+        aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group mb-1">
+      <span class="input-group-text" id="basic-addon1">Geburtsdatum</span>
+      <input
+        class="form-control"
+        placeholder="jjjj-mm-tt"
+        name="date_birth"
+        [(ngModel)]="patient.date_birth"
+        [disabled]="!isWritable()"
+        ngbDatepicker
+        #d="ngbDatepicker"
+      />
+      <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">Öffne Kalendar</button>
+    </div>
+    <label class="mt-2">Kontaktdaten</label>
+    <div class="input-group mb-1">
+      <span class="input-group-text" id="basic-addon1">Adresse 1. Zeile</span>
+      <input
+        name="address_1"
+        type="text"
+        [(ngModel)]="patient.address_1"
+        [disabled]="!isWritable()"
+        class="form-control"
+        placeholder="Adresse 1. Zeile"
+        aria-label="Adresse 1. Zeile"
+        aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group mb-1">
+      <span class="input-group-text" id="basic-addon1">Adresse 2. Zeile</span>
+      <input
+        name="address_2"
+        type="text"
+        [(ngModel)]="patient.address_2"
+        [disabled]="!isWritable()"
+        class="form-control"
+        placeholder="Adresse 2. Zeile"
+        aria-label="Adresse 2. Zeile"
+        aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group mb-1">
+      <span class="input-group-text" id="basic-addon1">Postleitzahl</span>
+      <input [(ngModel)]="patient.post_code" [disabled]="!isWritable()" name="postcode" type="text" class="form-control" placeholder="Postleitzahl" aria-label="Postleitzahl" aria-describedby="basic-addon1">
+      <input [(ngModel)]="patient.city" [disabled]="!isWritable()" name="city" type="text" class="form-control" placeholder="Stadt" aria-label="Stadt" aria-describedby="basic-addon1">
+    </div>
+
+    <div class="input-group mb-1">
+      <span class="input-group-text" id="basic-addon1">Telefonnummer</span>
+      <input
+        name="phone_number"
+        type="text"
+        [(ngModel)]="patient.phone_number"
+        [disabled]="!isWritable()"
+        class="form-control"
+        placeholder="Telefonnummer"
+        aria-label="Telefonnummer"
+        aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group mb-1">
+      <span class="input-group-text" id="basic-addon1">Faxnummer</span>
+      <input
+        name="fax_number"
+        type="text"
+        [(ngModel)]="patient.fax_number"
+        [disabled]="!isWritable()"
+        class="form-control"
+        placeholder="Faxnummer"
+        aria-label="Faxnummer"
+        aria-describedby="basic-addon1">
+    </div>
+    <label class="mt-2">Versicherungsdaten</label>
+    <div class="input-group mb-1">
+      <span class="input-group-text" id="basic-addon1">Name der Krankenkasse</span>
+      <input
+        name="insurance_name"
+        type="text"
+        [(ngModel)]="patient.insurance_name"
+        [disabled]="!isWritable()"
+        class="form-control"
+        placeholder="Name der Krankenkasse"
+        aria-label="Name der Krankenkasse"
+        aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group mb-1">
+      <span class="input-group-text" id="basic-addon1">Versicherten-Nummer</span>
+      <input
+        name="insurance_number"
+        type="text"
+        [(ngModel)]="patient.insurance_number"
+        [disabled]="!isWritable()"
+        class="form-control"
+        placeholder="Versicherten-Nummer"
+        aria-label="Versicherten-Nummer"
+        aria-describedby="basic-addon1">
+    </div>
+    <button type="submit" class="btn btn-primary">Speichern</button>
+  </form>
+}

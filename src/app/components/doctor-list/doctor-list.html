@@ -3,7 +3,7 @@
     @for (doctor of doctors; track doctor.id){
       <a class="list-group-item" [routerLink]="['/doctor-detail/' + doctor.id]">
         <h5> {{doctor.title}} {{doctor.last_name}}, {{doctor.first_name}}</h5>
-        <p>{{doctor.city}}</p>
+        <span>{{doctor.city}}</span>
       </a>
     }
   } @else {

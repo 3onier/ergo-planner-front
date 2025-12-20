@@ -22,14 +22,14 @@ export class LocalDoctorRepository implements IDoctorRepository {
     }
 
     getAllDoctors(): Observable<Array<Doctor>> {
-        return of(this.loadDoctorsFromLocal()).pipe(delay(500));
+        return of(this.loadDoctorsFromLocal());
     }
     getDoctorById(id: number): Observable<Doctor> {
       let doctors = this.loadDoctorsFromLocal();
       let index = doctors.findIndex( (d) => d.id == id );
       if(index == -1)
         throw new NotFoundException();
-      return of(doctors[index]).pipe(delay(500));
+      return of(doctors[index]);
     }
     saveDoctor(dr: Doctor): Observable<Doctor> {
       let doctors = this.loadDoctorsFromLocal();
@@ -41,6 +41,8 @@ export class LocalDoctorRepository implements IDoctorRepository {
         let id = Math.max(...doctors.map(
           (d) => d.id || 0
         )) + 1;
+        if(id == null)
+          id = 1
         dr.id = id;
         doctors.push(dr);
       }
