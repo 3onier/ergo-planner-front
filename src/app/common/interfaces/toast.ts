@@ -1,4 +1,6 @@
 export interface Toast{
   text: string,
-  color: string
+  header?: string
+  color: string,
+  delay?: number
 }

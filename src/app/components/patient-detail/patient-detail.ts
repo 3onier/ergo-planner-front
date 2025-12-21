@@ -11,8 +11,7 @@ import {NgbDatepicker, NgbInputDatepicker} from '@ng-bootstrap/ng-bootstrap';
   imports: [
     ReactiveFormsModule,
     FormsModule,
-    NgbInputDatepicker,
-    NgbDatepicker
+    NgbInputDatepicker
   ],
   templateUrl: './patient-detail.html',
   styleUrl: './patient-detail.css',

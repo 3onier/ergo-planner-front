@@ -1,0 +1,11 @@
+<div class="toast-container position-fixed bottom-0 end-0">
+  @for (toast of toastService.toasts(); track $index){
+    <ngb-toast
+      [class]="'bg-' + toast.color +  ' text-light'"
+      [delay]="toast.delay || 3500"
+      (hidden)="toastService.deleteToast(toast)"
+    >
+      {{toast.text}}
+    </ngb-toast>
+  }
+</div>

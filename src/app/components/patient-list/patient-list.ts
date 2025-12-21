@@ -8,7 +8,6 @@ import {RouterLink} from '@angular/router';
 @Component({
   selector: 'app-patient-list',
   imports: [
-    DateFormattingPipe,
     RouterLink
   ],
   templateUrl: './patient-list.html',
