@@ -3,6 +3,7 @@
     <ngb-toast
       [class]="'bg-' + toast.color +  ' text-light'"
       [delay]="toast.delay || 3500"
+      [header]="toast.header || 'Benachrichtigung'"
       (hidden)="toastService.deleteToast(toast)"
     >
       {{toast.text}}

@@ -11,7 +11,6 @@ export class ToastService {
 
   public displayToast(toast: Toast){
     this._toasts.update( (toasts) => [...toasts, toast] );
-    console.log(toast.text);
   }
 
   public deleteToast(toast: Toast){
