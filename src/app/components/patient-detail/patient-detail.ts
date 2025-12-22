@@ -1,10 +1,11 @@
-import {Component, computed, inject, Input, OnInit, signal} from '@angular/core';
+import {Component, computed, EventEmitter, inject, Input, OnInit, Output, signal} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Patient} from '../../models/patient';
 import {ActivatedRoute} from '@angular/router';
 import {PatientService} from '../../services/patient-service';
 import {ToastService} from '../../services/toast-service';
 import {NgbDatepicker, NgbInputDatepicker} from '@ng-bootstrap/ng-bootstrap';
+import {ModelFormWithSubmit} from '../abstract/ModelFormWithSubmit';
 
 @Component({
   selector: 'app-patient-detail',
@@ -16,9 +17,10 @@ import {NgbDatepicker, NgbInputDatepicker} from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './patient-detail.html',
   styleUrl: './patient-detail.css',
 })
-export class PatientDetail implements OnInit{
+export class PatientDetail extends ModelFormWithSubmit<Patient> implements OnInit{
 
-  @Input() patient = new Patient()
+  @Input() model?: Patient;
+  @Output() submitEvent = new EventEmitter<Patient>();
 
   isWritable = signal(true);
 
@@ -31,33 +33,31 @@ export class PatientDetail implements OnInit{
 
 
   ngOnInit() {
-    // check if parameter ID is given
-    let idStrOrNull = this.activatedRoute.snapshot.paramMap.get("id");
-    if (idStrOrNull != null){
-      let id = parseInt(idStrOrNull);
-      this.patientService.getPatientById(id).subscribe({
-        next: (p) => {
-          this.patient = p;
+    // get id or null from route
+    let idOrNull = this.activatedRoute.snapshot.paramMap.get("id");
+    // check if input is given first
+    if(this.model !== undefined){
+      this.isLoadingPatient.set(false);
+      this.isWritable.set(true);
+    }else if (idOrNull !== null){
+      this.patientService.getPatientById(parseInt(idOrNull)).subscribe({
+        next: p => {
+          this.model = p;
           this.isLoadingPatient.set(false);
           this.isWritable.set(false);
         },
-        error: (e) => {
-          this.toastService.displayToast({
-            color: 'danger',
-            text: 'Patient konnte nicht geladen oder gefunden werden'
-          })
-        }
+        error: (e) => this.toastService.displayToast({text: "Patient konnte nicht geladen werden", color: "danger"})
       })
-    }else {
-      this.isLoadingPatient.set(false);
-      this.isWritable.set(true);
     }
   }
 
-  save(){
-    this.patientService.savePatient(this.patient).subscribe({
+  onSubmit(){
+    if(this.model===undefined)
+      return
+    this.patientService.savePatient(this.model).subscribe({
       next: (p) => {
-        this.patient = p;
+        this.model = p;
+        this.submitEvent.emit(p);
         this.toastService.displayToast({
           text: "Patient wurde gespeichert",
           color: "success"

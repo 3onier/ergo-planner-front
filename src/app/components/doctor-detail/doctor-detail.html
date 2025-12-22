@@ -1,13 +1,13 @@
-@if (!isDoctorLoading() && doctor !== undefined) {
-  <form class="p-1" ngNativeValidate (ngSubmit)="submit()">
-    <div class="container-fluid p-0 d-flex justify-content-between align-items-end">
+@if (!isDoctorLoading() && model !== undefined) {
+  <form class="p-1" ngNativeValidate (ngSubmit)="onSubmit()">
+    <div class="container-fluid p-0 d-flex justify-content-between align-it">
       <span>Daten zur Person</span>
       <div class="btn btn-outline-primary mb-1" (click)="toggleWritable()">Bearbeiten</div>
     </div>
     <div class="input-group mb-1">
       <span class="input-group-text" id="basic-addon1">Titel</span>
       <input
-        [(ngModel)]="doctor.title"
+        [(ngModel)]="model.title"
         name="title" type="text"
         class="form-control"
         [disabled]="!isWritable()"
@@ -18,7 +18,7 @@
     <div class="input-group mb-1">
       <span class="input-group-text" id="basic-addon1">Vorname</span>
       <input
-        [(ngModel)]="doctor.first_name"
+        [(ngModel)]="model.first_name"
         name="first_name"
         required="true"
         type="text"
@@ -31,7 +31,7 @@
     <div class="input-group mb-1">
       <span class="input-group-text" id="basic-addon1">Nachname</span>
       <input
-        [(ngModel)]="doctor.last_name"
+        [(ngModel)]="model.last_name"
         name="last_name"
         required="true"
         [disabled]="!isWritable()"
@@ -45,7 +45,7 @@
     <div class="input-group mb-1">
       <span class="input-group-text" id="basic-addon1">Adresse 1. Zeile</span>
       <input
-        [(ngModel)]="doctor.address_1"
+        [(ngModel)]="model.address_1"
         name="address_1"
         type="text"
         class="form-control"
@@ -57,7 +57,7 @@
     <div class="input-group mb-1">
       <span class="input-group-text" id="basic-addon1">Adresse 2. Zeile</span>
       <input
-        [(ngModel)]="doctor.address_2"
+        [(ngModel)]="model.address_2"
         name="address_2"
         type="text"
         class="form-control"
@@ -69,7 +69,7 @@
     <div class="input-group mb-1">
       <span class="input-group-text" id="basic-addon1">Postleitzahl</span>
       <input
-        [(ngModel)]="doctor.post_code"
+        [(ngModel)]="model.post_code"
         name="postcode"
         type="text"
         class="form-control"
@@ -78,7 +78,7 @@
         aria-label="Postleitzahl"
         aria-describedby="basic-addon1">
       <input
-        [(ngModel)]="doctor.city"
+        [(ngModel)]="model.city"
         name="city"
         type="text"
         class="form-control"
@@ -92,7 +92,7 @@
     <div class="input-group mb-1">
       <span class="input-group-text" id="basic-addon1">E-mail</span>
       <input
-        [(ngModel)]="doctor.email"
+        [(ngModel)]="model.email"
         aria-describedby="basic-addon1"
         aria-label="E-Mail-Adresse"
         class="form-control"
@@ -104,7 +104,7 @@
     <div class="input-group mb-1">
       <span class="input-group-text" id="basic-addon1">Telefonnummer</span>
       <input
-        [(ngModel)]="doctor.phone_number"
+        [(ngModel)]="model.phone_number"
         aria-describedby="basic-addon1"
         aria-label="Telefonnummer"
         class="form-control"
@@ -116,7 +116,7 @@
     <div class="input-group mb-1">
       <span class="input-group-text" id="basic-addon1">Faxnummer</span>
       <input
-        [(ngModel)]="doctor.fax_number"
+        [(ngModel)]="model.fax_number"
         name="fax_number"
         type="text"
         class="form-control"

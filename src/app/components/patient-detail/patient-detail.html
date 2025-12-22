@@ -1,11 +1,11 @@
-@if (isLoadingPatient()) {
+@if (isLoadingPatient() || model === undefined) {
   <div class="d-flex justify-content-center">
     <div class="spinner-border" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
   </div>
 } @else {
-  <form class="p-1" (ngSubmit)="save()">
+  <form class="p-1" (ngSubmit)="onSubmit()">
     <div class="container-fluid d-flex align-items-end justify-content-between p-0">
       <label class="mt-2">Angaben zur Person</label>
       <span class="btn btn-outline-primary mb-1" (click)="toggleWritable()">Bearbeiten</span>
@@ -13,7 +13,7 @@
     <div class="input-group mb-1">
       <span class="input-group-text" id="basic-addon1">Title</span>
       <input
-        [(ngModel)]="patient.title"
+        [(ngModel)]="model.title"
         name="title"
         type="text"
         required
@@ -26,7 +26,7 @@
     <div class="input-group mb-1">
       <span class="input-group-text" id="basic-addon1">Vorname</span>
       <input
-        [(ngModel)]="patient.first_name"
+        [(ngModel)]="model.first_name"
         name="first_name"
         type="text"
         required
@@ -39,7 +39,7 @@
     <div class="input-group mb-1">
       <span class="input-group-text" id="basic-addon1">Nachname</span>
       <input
-        [(ngModel)]="patient.last_name"
+        [(ngModel)]="model.last_name"
         name="last_name"
         type="text"
         required
@@ -55,7 +55,7 @@
         class="form-control"
         placeholder="jjjj-mm-tt"
         name="date_birth"
-        [(ngModel)]="patient.date_birth"
+        [(ngModel)]="model.date_birth"
         [disabled]="!isWritable()"
         ngbDatepicker
         #d="ngbDatepicker"
@@ -68,7 +68,7 @@
       <input
         name="address_1"
         type="text"
-        [(ngModel)]="patient.address_1"
+        [(ngModel)]="model.address_1"
         [disabled]="!isWritable()"
         class="form-control"
         placeholder="Adresse 1. Zeile"
@@ -80,7 +80,7 @@
       <input
         name="address_2"
         type="text"
-        [(ngModel)]="patient.address_2"
+        [(ngModel)]="model.address_2"
         [disabled]="!isWritable()"
         class="form-control"
         placeholder="Adresse 2. Zeile"
@@ -89,8 +89,8 @@
     </div>
     <div class="input-group mb-1">
       <span class="input-group-text" id="basic-addon1">Postleitzahl</span>
-      <input [(ngModel)]="patient.post_code" [disabled]="!isWritable()" name="postcode" type="text" class="form-control" placeholder="Postleitzahl" aria-label="Postleitzahl" aria-describedby="basic-addon1">
-      <input [(ngModel)]="patient.city" [disabled]="!isWritable()" name="city" type="text" class="form-control" placeholder="Stadt" aria-label="Stadt" aria-describedby="basic-addon1">
+      <input [(ngModel)]="model.post_code" [disabled]="!isWritable()" name="postcode" type="text" class="form-control" placeholder="Postleitzahl" aria-label="Postleitzahl" aria-describedby="basic-addon1">
+      <input [(ngModel)]="model.city" [disabled]="!isWritable()" name="city" type="text" class="form-control" placeholder="Stadt" aria-label="Stadt" aria-describedby="basic-addon1">
     </div>
 
     <div class="input-group mb-1">
@@ -98,7 +98,7 @@
       <input
         name="phone_number"
         type="text"
-        [(ngModel)]="patient.phone_number"
+        [(ngModel)]="model.phone_number"
         [disabled]="!isWritable()"
         class="form-control"
         placeholder="Telefonnummer"
@@ -110,7 +110,7 @@
       <input
         name="fax_number"
         type="text"
-        [(ngModel)]="patient.fax_number"
+        [(ngModel)]="model.fax_number"
         [disabled]="!isWritable()"
         class="form-control"
         placeholder="Faxnummer"
@@ -123,7 +123,7 @@
       <input
         name="insurance_name"
         type="text"
-        [(ngModel)]="patient.insurance_name"
+        [(ngModel)]="model.insurance_name"
         [disabled]="!isWritable()"
         class="form-control"
         placeholder="Name der Krankenkasse"
@@ -135,7 +135,7 @@
       <input
         name="insurance_number"
         type="text"
-        [(ngModel)]="patient.insurance_number"
+        [(ngModel)]="model.insurance_number"
         [disabled]="!isWritable()"
         class="form-control"
         placeholder="Versicherten-Nummer"

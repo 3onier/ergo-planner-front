@@ -4,6 +4,7 @@ import {Doctor} from '../../models/doctor';
 import {DoctorService} from '../../services/doctor-service';
 import {ActivatedRoute} from '@angular/router';
 import {ToastService} from '../../services/toast-service';
+import {ModelFormWithSubmit} from '../abstract/ModelFormWithSubmit';
 
 @Component({
   selector: 'app-doctor-detail',
@@ -13,10 +14,10 @@ import {ToastService} from '../../services/toast-service';
   templateUrl: './doctor-detail.html',
   styleUrl: './doctor-detail.css',
 })
-export class DoctorDetail implements OnInit{
+export class DoctorDetail implements OnInit, ModelFormWithSubmit<Doctor>{ //
 
-    @Input() public doctor?: Doctor;
-    @Output() public doctorUpdated: EventEmitter<Doctor> = new EventEmitter<Doctor>;
+    @Input() public model?: Doctor;
+    @Output() public submitEvent: EventEmitter<Doctor> = new EventEmitter<Doctor>();
 
     isWritable = signal(true);
 
@@ -31,9 +32,9 @@ export class DoctorDetail implements OnInit{
       let id = this.activatedRoute.snapshot.paramMap.get('id');
       if(id !== null){
         this.loadDoctorById(parseInt(id));
-      }else if(this.doctor === undefined){
+      }else if(this.model === undefined){
         this.isDoctorLoading.set(false);
-        this.doctor = new Doctor();
+        this.model = new Doctor();
       } else {
         this.toastService.displayToast({
           text: "Arzt konnte nicht geladen werden",
@@ -46,7 +47,7 @@ export class DoctorDetail implements OnInit{
       this.doctorService.getDoctorById(id).subscribe(
         {
           next: (dr) => {
-            this.doctor = dr;
+            this.model = dr;
             this.isDoctorLoading.set(false);
             this.isWritable.set(false);
           }
@@ -54,13 +55,13 @@ export class DoctorDetail implements OnInit{
       );
     }
 
-    submit(){
-      if(this.doctor === undefined)
+    onSubmit(){
+      if(this.model === undefined)
         return;
-      this.doctorService.saveDoctor(this.doctor).subscribe({
+      this.doctorService.saveDoctor(this.model).subscribe({
         next: (dr) => {
-          this.doctor = dr;
-          this.doctorUpdated.emit(dr);
+          this.model = dr;
+          this.submitEvent.emit(dr);
           this.toastService.displayToast({
             text: "Arzt wurde gespeichert",
             color: "success"
