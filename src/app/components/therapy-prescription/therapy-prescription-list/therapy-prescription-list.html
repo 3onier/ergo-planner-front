@@ -1,0 +1,33 @@
+<div class="list-group">
+  @if (therapyPrescriptionPage() && therapyPrescriptions() != undefined && !isComponentLoading()) {
+    @for (tp of therapyPrescriptions(); track tp.id) {
+      <a [href]="['therapy-prescription-detail/'+ tp.id]" class="list-group-item">
+        @if (tp.patient && therapyPrescriptionIdPatientMap()) {
+          <h6> {{ therapyPrescriptionIdPatientMap().get(tp.patient)?.getListName() }} </h6>
+        }
+        <span>
+          Austellungsdatum: {{tp.issue_date | dateFormatting}} <br>
+          @if (tp.doctor){
+            Arzt: {{ therapyPrescriptionIdDoctorMap().get(tp.doctor)?.getListName() }}
+          }
+        </span>
+      </a>
+    }
+  } @else {
+    <div class="container-fluid d-flex m-5 justify-content-center">
+      <div class="spinner-border">
+        <span class="visually-hidden">Lädt</span>
+      </div>
+    </div>
+  }
+  @if (therapyPrescriptions()) {
+    <div class="container-fluid mt-2 d-flex justify-content-center">
+      <ngb-pagination
+        [collectionSize]="therapyPrescriptionPage()?.count || 0"
+        (pageChange)="setPage($event)"
+        [pageSize]="therapyPrescriptionPage()?.page_size || environment.DEFAULT_PAGE_SIZE"
+      ></ngb-pagination>
+      <app-page-size-dropdown class="ms-2" [selectedPageSize]="page_size" (onSelect)="setPageSize($event)" ></app-page-size-dropdown>
+    </div>
+  }
+</div>

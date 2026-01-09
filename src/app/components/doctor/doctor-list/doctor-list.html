@@ -1,0 +1,27 @@
+<div class="list-group">
+  @if (!isDoctorsLoading()){
+    @for (doctor of doctors(); track doctor.id){
+      <a class="list-group-item" [routerLink]="['/doctor-detail/' + doctor.id]">
+        <h5> {{doctor.title}} {{doctor.last_name}}, {{doctor.first_name}}</h5>
+        <span>{{doctor.city}}</span>
+      </a>
+    }
+  } @else {
+    <div class="spinner-border m-3" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  }
+  <div class="container-fluid mt-2 d-flex justify-content-center">
+    <ngb-pagination
+      [pageSize]="doctorPage()?.page_size || 0"
+      [collectionSize]="doctorPage()?.count || 0"
+      (pageChange)="setPage($event)"
+    >
+    </ngb-pagination>
+    <app-page-size-dropdown
+      class="ms-2"
+      (onSelect)="setPageSize($event)"
+      [selectedPageSize]="pageSize()"
+      ></app-page-size-dropdown>
+  </div>
+</div>

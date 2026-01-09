@@ -1,0 +1,10 @@
+<div ngbDropdown class="d-inline-block">
+  <div class="btn btn-outline-primary" ngbDropdownToggle>
+    {{ selectedPageSize }}
+  </div>
+  <div ngbDropdownMenu>
+    @for (pageSize of pageOptions(); track pageSize){
+      <div ngbDropdownItem (click)="select(pageSize)" >{{pageSize}}</div>
+    }
+  </div>
+</div>

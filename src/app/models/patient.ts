@@ -13,5 +13,14 @@ export class Patient {
   email?: string;
   insurance_name?: string;
   insurance_number?: string;
+
+  constructor(params: Partial<Patient> = {}) {
+    Object.assign(this, params);
+  }
+
+  getListName(){
+    return this.last_name + ", " + this.first_name;
+  }
+
 }
 export type Patients = Array<Patient>;

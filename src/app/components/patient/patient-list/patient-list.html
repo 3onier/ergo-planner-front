@@ -1,0 +1,22 @@
+<div class="list-group">
+  @if (!isPatientsLoading()) {
+    @for (patient of patients(); track patient.id) {
+      <a [routerLink]="['patient-detail/' + patient.id]" class="list-group-item">
+        <h5>{{patient.last_name}}, {{patient.first_name}}</h5>
+        <span>{{ getPatientDetail(patient) }}</span>
+      </a>
+    }
+  }
+  <div class="container-fluid mt-2 d-flex justify-content-center">
+    <ngb-pagination
+      [pageSize]="patientPage()?.page_size || 0"
+      [collectionSize]="patientPage()?.count || 0"
+      (pageChange)="setPage($event)"
+    ></ngb-pagination>
+    <app-page-size-dropdown
+      class="ms-2"
+      [selectedPageSize]="pageSize()"
+      (onSelect)="setPageSize($event)"
+    ></app-page-size-dropdown>
+  </div>
+</div>

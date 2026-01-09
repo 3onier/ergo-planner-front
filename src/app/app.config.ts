@@ -8,6 +8,6 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    {provide: NgbDateAdapter, useClass: NgbDateNativeAdapter}
+    {provide: NgbDateAdapter, useClass: NgbDateNativeAdapter},
   ]
 };

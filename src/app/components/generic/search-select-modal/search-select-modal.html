@@ -1,0 +1,31 @@
+<ng-template #content>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modalRef?.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <input class="form-control mt-2 mb-2" name="search" (input)="onSearch($event)">
+    <div class="list-group">
+      @for (item of searchResults(); track item){
+        <div class="list-group-item" (click)="select(item)">
+          <h5>{{ item.title }}</h5>
+          <small> {{item.details}} </small>
+        </div>
+      }
+    </div>
+    @if (searchResultPage()) {
+      <div class="container-fluid mt-2 d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="searchResultPage()?.count || 0"
+          [pageSize]="searchResultPage()?.page_size || 0"
+          [page]="page()" [maxSize]="5"
+          (pageChange)="pageChange($event)" />
+        <app-page-size-dropdown
+          class="ms-2"
+          [selectedPageSize]="pageSize()"
+          (onSelect)="setPageSize($event)"
+        ></app-page-size-dropdown>
+      </div>
+    }
+  </div>
+</ng-template>

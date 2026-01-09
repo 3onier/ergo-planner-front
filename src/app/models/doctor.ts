@@ -10,4 +10,20 @@ export class Doctor {
   phone_number?: string;
   fax_number?: string;
   email?: string;
+
+  constructor(params: Partial<Doctor> = {}) {
+    Object.assign(this, params);
+  }
+
+  getListName(): string{
+    let out = "";
+    if(this.title)
+      out += this.title + " ";
+    if (this.last_name)
+      out += this.last_name;
+    if (this.first_name)
+      out += ", "  + this.first_name;
+    return out;
+  }
+
 }

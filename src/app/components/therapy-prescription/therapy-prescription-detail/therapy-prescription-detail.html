@@ -1,0 +1,201 @@
+@if (isLoading() || model === undefined) {
+  <div class="container-fluid d-flex justify-content-center p-5">
+    <div class="spinner-border">
+      <span class="visually-hidden">Lädt...</span>
+    </div>
+  </div>
+} @else {
+  <form ngNativeValidate class="p-2" (submit)="onSubmit()">
+    <div class="input-group">
+      <span class="form-label">Allgemein</span>
+    </div>
+    <div class="input-group mb-1">
+      <span class="input-group-text">Ausstellungsdatum</span>
+      <input ngbDatepicker #issue_date_picker="ngbDatepicker" class="form-control" type="text" name="issue_date" readonly="true" [(ngModel)]="model.issue_date">
+      <div class="btn btn-outline-primary" (click)="issue_date_picker.open()">Kalendar</div>
+    </div>
+    <div class="input-group mb-1">
+      <span class="input-group-text" id="basic-addon1">Patient</span>
+      <input
+        [(ngModel)]="helperInputs.selectedPatientString"
+        name="selectedPatientString"
+        type="text"
+        class="form-control"
+        readonly
+        [disabled]="!isWritable()"
+        placeholder="Klicke auf suche um einen Patient zu finden"
+        aria-label="Patient"
+        aria-describedby="basic-addon1">
+      <div
+        class="btn btn-outline-primary"
+       (click)="patientSearch.open()">
+        Patient suchen
+      </div>
+    </div>
+    <div class="input-group mb-1">
+      <span class="input-group-text" id="basic-addon1">Arzt</span>
+      <input
+        [(ngModel)]="helperInputs.selectedDoctorString"
+        name="selectedDoctorString"
+        type="text"
+        class="form-control"
+        readonly
+        [disabled]="!isWritable()"
+        placeholder="Klicke auf suche um einen Arzt zu finden"
+        aria-label="Arzt"
+        aria-describedby="basic-addon1">
+      <div
+        class="btn btn-outline-primary"
+        (click)="doctorSearch.open()">
+        Arzt suchen
+      </div>
+    </div>
+    <span class="form-label">Diagnosen</span>
+    <div class="btn btn-outline-primary  mt-2 w-100" (click)="icdSearch.open()">Suche Diagnose</div>
+      @if (model && model.icd_codes.length > 0) {
+        <div class="list-group mt-2">
+        @for (code of model.icd_codes; track code){
+          <div class="list-group-item d-flex justify-content-between">
+            <span>{{code}}</span>
+            <div class="badge bg-danger" (click)="icdRemove(code)">entfernen</div>
+          </div>
+        }
+        </div>
+      }
+    <div class="input-group mt-2">
+      <span class="input-group-text" id="basic-addon1">ICD-Code</span>
+      <input
+        [(ngModel)]="helperInputs.idcCodAddString"
+        class="form-control"
+        name="diagnosis_1"
+        placeholder="ICD-Code"
+      >
+      <div class="btn btn-outline-primary" (click)="icdAdded()" >hinzufügen</div>
+    </div>
+    <div class="input-group mt-2">
+      <span class="input-group-text">Diagnosetext</span>
+      <textarea
+        class="form-control"
+        placeholder="Beschreibung der Diagnose"
+        [(ngModel)]="model.diagnosis"
+        name="diagnosis"
+      ></textarea>
+    </div>
+
+    <div class="input-group mt-2">
+      <div class="dropdown" ngbDropdown #diagnoseGroupDropdown="ngbDropdown">
+        <button
+          class="btn btn-primary rounded-end-0 dropdown-toggle"
+          type="button"
+          data-bs-toggle="dropdown"
+          ngbDropdownToggle>{{ model.diagnosis_group || "Diagnosegruppe" }}</button>
+        <div ngbDropdownMenu>
+          <div ngbDropdownItem (click)="model.diagnosis_group = undefined; diagnosisGroup.set(undefined)">Löschen</div>
+          @for (group of diagnosisGroups(); track group.abbreviation;){
+            <div ngbDropdownItem (click)="selectDiagnosisGroup(group)" > {{group.abbreviation}} </div>
+          }
+        </div>
+      </div>
+      <span class="input-group-text">Leitsymptomatik</span>
+      <div class="btn-group flex-fill" role="group" aria-label="Basic checkbox toggle button group">
+        <input type="checkbox" class="btn-check" id="key_symptom_a" name="key_symptom_a" [(ngModel)]="model.key_symptom_a" autocomplete="off">
+        <label class="btn btn-outline-primary rounded-start-0" for="key_symptom_a">A</label>
+
+        <input type="checkbox" class="btn-check" id="key_symptom_b" name="key_symptom_b" [(ngModel)]="model.key_symptom_b" autocomplete="off">
+        <label class="btn btn-outline-primary" for="key_symptom_b">B</label>
+
+        <input type="checkbox" class="btn-check" id="key_symptom_c" name="key_symptom_c" [(ngModel)]="model.key_symptom_c" autocomplete="off">
+        <label class="btn btn-outline-primary" for="key_symptom_c">C</label>
+      </div>
+    </div>
+    @if (diagnosisGroup()) {
+      <div class="card mt-2">
+        <h6 class="card-header">{{ diagnosisGroup()?.description }}</h6>
+        <div class="card-body">
+          <ul class="card-text">
+            @if (diagnosisGroup()?.keySymptomA) {
+              <li><b>A:</b> {{diagnosisGroup()?.keySymptomA}}</li>
+            }
+            @if (diagnosisGroup()?.keySymptomB) {
+              <li><b>B:</b> {{diagnosisGroup()?.keySymptomB}}</li>
+            }
+            @if (diagnosisGroup()?.keySymptomC) {
+              <li><b>C:</b> {{diagnosisGroup()?.keySymptomC}}</li>
+            }
+          </ul>
+        </div>
+      </div>
+    }
+    <div class="input-group mt-2">
+      <span class="input-group-text">
+        <label class="form-check-label ms-1" for="key_symptom_individual_checkbox">Patienteneigene<br>Leitsymptomatik</label>
+      </span>
+      <span class="input-group-text">
+        <input
+          id="key_symptom_individual_checkbox"
+          type="checkbox"
+          class="form-check-input mt-0"
+          name="key_symptom_individual_bool"
+          [(ngModel)]="model.key_symptom_individual_bool">
+      </span>
+      <textarea
+        class="form-control"
+        [disabled]="!model.key_symptom_individual_bool"
+        [(ngModel)]="model.key_symptom_individual_text"
+        name="key_symptom_individual_text"
+      ></textarea>
+    </div>
+    <div class="d-flex align-content-stretch mt-2">
+      <div class="input-group">
+        <label class="input-group-text form-check-label" for="therapy_report_checkbox">Therapiebericht</label>
+        <div class="input-group-text">
+          <input [(ngModel)]="model.therapy_report" type="checkbox" id="therapy_report_checkbox" name="therapy_report" class="form-check">
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-group-text" for="home_visit_checkbox">Hausbesuch</label>
+        <div class="input-group-text">
+          <input [(ngModel)]="model.home_visit" type="checkbox" id="home_visit_checkbox" name="home_visit" class="form-check">
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-group-text" for="urgent_checkbox">Dringligkeit</label>
+        <div class="input-group-text">
+          <input [(ngModel)]="model.urgent" type="checkbox" id="urgent_checkbox" name="urgent" class="form-check">
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-group-text" for="therapy_frequency_input">Therapiefrequenz</label>
+        <input [(ngModel)]="model.therapy_frequency" id="therapy_frequency_input" name="therapy_frequency" class="form-control">
+      </div>
+
+    </div>
+
+    <div class="input-group mt-2">
+      <span class="input-group-text">Therapieziele und <br>andere Befunde</span>
+      <textarea [(ngModel)]="model.therapy_goals_and_comment" name="therapy_goals_and_comment" class="form-control"></textarea>
+    </div>
+    <input type="submit" class="btn btn-primary mt-2 d-block w-100" value="Speichern">
+  </form>
+  <app-search-select-modal
+    #patientSearch
+    title="Patienten auswählen"
+    [searchService]="patientService"
+    (onSelected)="patientSelected($event)"
+  ></app-search-select-modal>
+  <app-search-select-modal
+    #doctorSearch
+    title="Arzt auswählen"
+    [searchService]="doctorService"
+    (onSelected)="doctorSelected($event)"
+  ></app-search-select-modal>
+  <app-search-select-modal
+    #icdSearch
+    title="Suche nach einer Diagnose"
+    [searchService]="idcService"
+    (onSelected)="icdSelected($event)"
+  ></app-search-select-modal>
+}
